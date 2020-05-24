@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>我的房源</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/currenct.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script src="js/include.js" type="text/javascript"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/check.js"></script>
+    <style>
+        #myhousres{
+            min-height: 520px;
+        }
+    </style>
+</head>
+<body>
+<!--页眉部分-->
+<header id="header">
+
+</header>
+<!--主体-->
+<div id="myhousres" class="container-fluid">
+
+    <table class="table table-hover table-responsive">
+        <caption>我的顾客</caption>
+        <tr>
+            <th>编号</th>
+            <th>标题</th>
+            <th>简介</th>
+            <th>地址</th>
+            <th>评分</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="housres in housresList">
+            <td>{{housres.hid}}</td>
+            <td>
+                {{housres.hname}}
+            </td>
+            <td>
+                <textarea class="input-sm" v-model="housres.hdetail" disabled></textarea></td>
+            <td>{{housres.housresdetail}}</td>
+            <td>
+                <span class="label label-success">{{housres.hscore}}</span>
+            </td>
+            <td>
+                <a v-on:click="findAllCommentByHid(housres.hid)" class="btn btn-warning">查看评论</a>
+                <a v-on:click="findAllOrderByHid(housres.hid)" class="btn btn-warning">查看订单</a>
+                <a v-on:click="deleteHourseByHid(housres)" class="btn btn-danger">删除</a>
+            </td>
+        </tr>
+    </table>
+    <table class="table table-hover table-striped">
+        <caption>订单信息详情</caption>
+        <tr>
+            <th>序号</th>
+            <th>订单编号</th>
+            <th>入住人</th>
+            <th>下单日期</th>
+            <th>入住日期</th>
+            <th>退房日期</th>
+            <th>是否支付</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="order in orderList">
+            <td>{{order.oid}}</td>
+            <td>{{order.onum}}</td>
+            <td>{{order.user.name}}</td>
+            <td>{{order.odate}}</td>
+            <td>{{order.checkindate}}</td>
+            <td>{{order.checkoutdate}}</td>
+            <td>
+                <span v-if="order.ispay" class="label label-success">{{order.ispay ? '是':'否'}}</span>
+                <span v-if="!order.ispay" class="label label-danger">{{order.ispay ? '是':'否'}}</span>
+            </td>
+            <td>
+                <a v-if="!order.ishandle" v-on:click="checkin(order)" class="btn btn-success">办理入住</a>
+                <a v-if="order.ishandle && order.ischeck" v-on:click="checkOut(order)" class="btn btn-warning">办理退房</a>
+                <span v-if="order.ishandle && !order.ischeck" class="label label-success">订单完成</span>
+            </td>
+        </tr>
+    </table>
+    <table class="table table-responsive table-hover">
+        <caption>评论回复</caption>
+        <tr>
+            <th>编号</th>
+            <th>内容</th>
+            <th>描述</th>
+            <th>卫生</th>
+            <th>位置</th>
+            <th>评价时间</th>
+            <th>回复</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="comment in commentList">
+            <td>{{comment.cid}}</td>
+            <td>
+                <textarea class="input-sm info" v-model="comment.content" disabled></textarea></td>
+            <td>{{comment.des}}</td>
+            <td>{{comment.hygiene}}</td>
+            <td>{{comment.location}}</td>
+            <td>{{comment.contentdate}}</td>
+            <td>
+                <span v-if="comment.reply!=null" class="label label-success">{{comment.reply}}</span>
+                <span v-if="comment.reply==null" class="label label-danger">待回复</span>
+            </td>
+            <td>
+                <a v-show="comment.reply==null" v-on:click="storeComment(comment)" class="btn btn-success" data-toggle="modal" data-target="#mymodal">回复</a>
+            </td>
+        </tr>
+    </table>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">回复评论</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea class="input-sm" style="width: 555px;height: 90px;" v-model="tempcomment.reply" placeholder="请回复"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="reply(tempcomment)">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+<!--页脚部分-->
+<footer id="footer">
+
+</footer>
+</body>
+<script>
+    new Vue({
+        el:"#myhousres",
+        data:{
+            housresList:[],
+            commentList:[],
+            orderList:[],
+            tempcomment:{
+                cid:0,
+                reply:'谢谢评价！'
+            }
+        },
+        methods:{
+            findAllHousresByUid:function () {
+                var _this = this;
+                axios.post("housres/findAllHousresByUid")
+                    .then(function (response) {
+                        if(response.data.length == 0){
+                            location.href="business.html";
+                            return;
+                        }
+                        _this.housresList = response.data;
+                    });
+            },
+            findAllCommentByHid:function (hid) {
+                var _this = this;
+                var param = new URLSearchParams();
+                param.append("hid",hid);
+                axios.post("comment/findAllCommentByHid",param)
+                    .then(function (response) {
+                        _this.commentList = response.data;
+                    });
+            },
+            storeComment:function(comment){
+                this.tempcomment.cid = comment.cid;
+            },
+            reply:function (reply) {
+                alert(reply.cid+"----"+reply.reply);
+                var param = new URLSearchParams();
+                param.append("cid",reply.cid);
+                param.append("reply",reply.reply);
+                var _this = this;
+                axios.post("comment/reply",param)
+                    .then(function (response) {
+                        if(response.data.flag){
+                            alert("回复成功！");
+                            _this.reboot(reply);
+                        }
+                    });
+            },
+            reboot:function (replay) {
+                for (var i = 0; i < this.commentList.length; i++) {
+                    if(replay.cid==this.commentList[i].cid){
+                        this.commentList[i].reply=replay.reply;
+                    }
+                }
+            },
+            init:function () {
+                axios.post("user/findOne")
+                    .then(function (response) {
+                        if (response.data==null){
+                            location.href="login.html";
+                            return;
+                        }
+                    });
+            },
+            findAllOrderByHid:function (hid) {
+                var _this = this;
+                var param= new URLSearchParams();
+                param.append("hid",hid);
+                axios.post("order/findOrderByHid",param)
+                    .then(function (response) {
+                        _this.orderList = response.data;
+                    });
+            },
+            checkin:function (order) {
+                var oid = order.oid;
+                if(!confirm("该订单为线下支付，请确认收款口办理入住！")){
+                    return;
+                }
+                var _this = this;
+                var param =new URLSearchParams();
+                param.append("oid",oid);
+                axios.post("order/checkin",param)
+                    .then(function (response) {
+                        if(response.data.flag){
+                            _this.changeOrder(response.data.data);
+                            alert("办理成功！");
+                        }
+                    });
+            },
+            checkOut:function (order) {
+                var oid = order.oid;
+                alert(oid);
+                var _this = this;
+                var param =new URLSearchParams();
+                param.append("oid",oid);
+                axios.post("order/checkOut",param)
+                    .then(function (response) {
+                        if(response.data.flag){
+                            _this.changeOrder(response.data.data);
+                            alert("办理成功！");
+                        }
+                    });
+            },
+            deleteHourseByHid:function(housres){
+                console.log(housres);
+                var param =new URLSearchParams();
+                param.append("hid",housres.hid)
+                axios.post("housres/deleteHourseByHid",param)
+                    .then(function (response) {
+                        if (response.data.flag){
+                            let list = this.housresList;
+                            for(let i in list){
+                                if(list[i].hid==housres.hid){
+                                    list.splice(i,1);
+                                    location.reload();
+                                }
+                            }
+                        }
+                    })
+
+            },
+            changeOrder:function(order) {
+                for (var i = 0; i < this.orderList.length; i++) {
+                    if(order.oid == this.orderList[i].oid){
+                        this.orderList[i].ischeck=order.ischeck;
+                        this.orderList[i].ishandle=order.ishandle;
+                        this.orderList[i].ispay=order.ispay;
+                    }
+                }
+            }
+        },
+        created:function () {
+            this.init();
+            this.findAllHousresByUid();
+            //this.findAllCommentByUid();
+        }
+    });
+</script>
+</html>

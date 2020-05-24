@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>我的预定</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/getParameter.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/currenct.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script type="text/javascript" src="js/include.js"></script>
+    <link rel="stylesheet" href="css/order.css">
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/axios.js"></script>
+    <style>
+        #order-div{
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <header id="header"></header>
+    <div id="order-div">
+    <div class="container-fluid">
+        <table id="orders" class="table table-hover table-responsive">
+            <caption>我的预定</caption>
+            <tr>
+                <th>订单编号</th>
+                <th>房间名称</th>
+                <th>入住人数</th>
+                <th>入住时间</th>
+                <th>退房时间</th>
+                <th>下单时间</th>
+                <th>是否支付</th>
+                <th>是否入住</th>
+                <th>评价</th>
+            </tr>
+            <tr v-for="order in orderList" v-bind:class="{success:order.cid==null}" >
+                <td>{{order.onum}}</td>
+                <td>{{order.housres.hname}}</td>
+                <td>{{order.housres.checkincount}}</td>
+                <td>{{order.checkindate}}</td>
+                <td>{{order.checkoutdate}}</td>
+                <td>{{order.odate}}</td>
+                <td>{{order.ispay ? '是':'否'}}</td>
+                <td>
+                    <span v-if="order.ischeck && order.ishandle" class="label label-warning">入住中</span>
+                    <span v-if="!order.ishandle" class="label label-danger">待入住</span>
+                    <span v-if="!order.ischeck && order.ishandle" class="label label-success">已退房</span>
+                </td>
+                <td>
+                    <a v-if="order.cid==null && !order.ischeck && order.ishandle" v-on:click="showDetail(order)" class="btn btn-warning">待评价</a>
+                    <span v-if="order.cid!=null" class="label label-success">已评价</span>
+                    <span v-if="order.cid!=null && order.ischeck" class="label label-warning">入住中</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </div>
+    <footer id="footer"></footer>
+</body>
+<script>
+    new Vue({
+        el:"#order-div",
+        data:{
+            orderList:[]
+        },
+        methods:{
+            //加载我的订单
+            loadMyOrder:function (){
+                axios.post("user/findOne")
+                    .then(function (response) {
+                        if (response.data==null){
+                            location.href="login.html";
+                            return;
+                        }
+                    });
+                var _this = this;
+                axios.post("order/findAllByUid")
+                    .then(function(response){
+                        _this.orderList = response.data;
+                        //alert(JSON.stringify(_this.orderList));
+                }) ;
+            },
+            showDetail:function (order) {
+                if(order.cid==null){
+                    location.href="comment.html?oid="+order.oid;
+                }
+            }
+        },
+        created:function () {
+            this.loadMyOrder();
+        }
+    });
+</script>
+</html>

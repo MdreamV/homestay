@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>提交订单</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/getParameter.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/currenct.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script type="text/javascript" src="js/include.js"></script>
+    <style>
+        .order-tool{
+            float: left;
+            height: 500px;
+            background-color: #ecf0f1;
+            padding: 5px;
+            margin-left: 25%;
+            width: 50%;
+            border-left: 3px #888888 dotted;
+            border-right: 3px #888888 dotted;
+            margin-bottom: 1px;
+            font-size: 35px;
+            text-align: center;
+            line-height: 500px;
+        }
+       #info{
+            height: 500px;
+            
+        }
+        
+    </style>
+    <script>
+        $(function(){
+            currentTime(5);
+        });
+        //计时转跳
+        function currentTime(f){
+            var second = f;
+            setInterval(function(){
+                $("#time1").html(second);
+                second -= 1;
+                if(second===0){
+                    location.href="myorder.html";
+                }
+            },1000);
+        }
+    </script>
+</head>
+    <body>
+        <header id="header"></header>
+        <div class="container-fluid" id="info">
+            <div class="row">
+                <div class="order-tool">支付成功，<span id="time1"></span>秒后转跳订单页面...</div>
+            </div>
+        </div>
+        <footer id="footer"></footer>
+    </body>
+</html>

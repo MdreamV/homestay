@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>注册</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="css/register.css">
+    <link type="text/css" rel="stylesheet" href="css/header.css">
+    <script type="text/javascript" src="js/include.js"></script>
+    <style>
+        body{
+            /*background: url("./img/bg.jpg") no-repeat center 100%;*/
+            background-color: #ecf0f1;
+        }
+    </style>
+    <script>
+        /*
+            表单校验：
+                1.用户名：单词字符，长度8到20位
+                2.密码：单词字符，长度8到20位
+                3.eamil:邮件格式
+                4.姓名：非空
+                5.手机号：手机号格式
+                6.出生日期：非空
+                7.验证码：非空
+        */
+        //校验用户名
+        function checkUserName(){
+            //1.获取用户名
+            var userName=$("#userName").val();
+            //2.定义正则表达式
+            var reg_username=/^\w{8,20}$/;
+            //3.判断匹配信息
+            var flag=reg_username.test(userName);
+            //4.给出提示信息
+            if(flag){
+                $("#userName").css({"border":"1px solid green","color":"green"});
+            }else{
+                $("#userName").val("用户名长度为8-20,英文字符");
+                $("#userName").css({"border":"1px solid red","color":"red"});
+            }
+            // alert("校验用户名");
+            return flag;
+        }
+        //校验密码
+        function checkPassword(){
+            //1.获取密码
+            var password=$("#password").val();
+            //2.定义正则表达式
+            var reg_password=/^\w{8,20}$/;
+            //3.判断匹配信息
+            var flag=reg_password.test(password);
+            //4.给出提示信息
+            if(flag){
+                $("#password").css({"border":"1px solid green","color":"green"});
+            }else{
+                $("#password").attr("placeholder","密码长度为8-20");
+                $("#password").css({"border":"1px solid red","color":"red"});
+            }
+            // alert("校验密码");
+            return flag;
+        }
+        //校验邮箱
+        function checkEmail(){
+            //1.获取邮箱
+            var email=$("#email").val();
+            //2.定义正则    2925235864@qq.com
+            var reg_email=/\w+@\w+\.\w+/;
+            //3.判断匹配
+            var flag=reg_email.test(email);
+            if(flag){
+                $("#email").css({"border":"1px solid green","color":"green"});
+            }else{
+                $("#email").attr("placeholder","请检查格式");
+                $("#email").css({"border":"1px solid red","color":"red"});
+            }
+            return flag;
+        }
+        //校验姓名
+        function checkName(){
+            //1.获取姓名
+            var name=$("#name").val();
+            //2.定义正则    张三
+            var reg_name=/\W+/;
+            //3.判断匹配
+            var flag=reg_name.test(name);
+            if(flag){
+                $("#name").css({"border":"1px solid green","color":"green"});
+            }else{
+                $("#name").attr("placeholder","格式不正确");
+                $("#name").css({"border":"1px solid red","color":"red"});
+            }
+            return flag;
+        }
+        //校验手机号
+        function checkTel(){
+            //1.获取手机号
+            var tel=$("#tel").val();
+            //2.定义正则    15938377569
+            var reg_tel=/\d{11}/;
+            //3.判断匹配
+            var flag=reg_tel.test(tel);
+            if(flag){
+                $("#tel").css({"border":"1px solid green","color":"green"});
+            }else{
+                $("#tel").attr("placeholder","格式不正确");
+                $("#tel").css({"border":"1px solid red","color":"red"});
+            }
+            return flag;
+        }
+        //校验出生日期
+        function checkBirthday(){
+            //1.获取出生日期
+            var birthday = $("#birthday").val();
+            //alert(birthday);
+            //2.定义正则表达式
+            var reg_birthday=/\d{4}\-\d{2}\-\d{2}/;
+            //3.判断匹配结果
+            var flag = reg_birthday.test(birthday);
+            if(flag){
+                $("#birthday").css({"border":"1px solid green","color":"green"});
+                //alert(flag);
+            }else{
+                $("#birthday").css({"border":"1px solid red","color":"red"}).html("请输入出生日期");
+                //alert(flag);
+            }
+            return flag;
+        }
+        //校验验证码
+        function checkCHECKCODE(){
+            //1.获取验证码
+            var checkCode = $("#checkCode").val();
+            //2.判断验证码是否为空
+            if(checkCode===""){
+                $("#checkCode").css({"border":"1px solid red","color":"red"}).attr("placeholder","请输入正确的验证码！");
+                return false;
+            }else{
+                $("#checkCode").css({"border":"1px solid green","color":"green"});
+                return true;
+            }
+        }
+        //点击更换验证码
+        function changeImg(){
+            var img = document.getElementById("img_checkCode");
+            var date=new Date();
+            img.src="user/checkCode?"+date.getMilliseconds();
+            //alert(img.src);
+        }
+        //页面加载函数
+        $(function(){
+            //当提交表单时，调用所有校验方法
+                $("#registerForm").submit(function(){
+                    if(checkUserName() && checkPassword() && checkEmail() && checkName() && checkTel() && checkCHECKCODE()){
+                        alert("请稍等，注意查收激活邮件！");
+                        $.post("user/register",$(this).serialize(),function(data){
+                            //消息回显
+                            if (data.flag){
+                                //返回结果正常
+                                $("#errorMsg").html(data.errorMsg).css("color","green");
+                                location.href="register_success.html";
+                                //alert("ddddd");
+                                //changeImg();
+                            } else{
+                                $("#errorMsg").html(data.errorMsg).css("color","red");
+                                changeImg();
+                            }
+                        });
+                    }
+                    return false;
+                    //如果这个方法没有返回值，或者返回为true,则表单提交，如果返回为false,则表单不提交
+                });
+
+            //当一个组件失去焦点时，调用对应的校验方法
+            $("#userName").blur(checkUserName);
+            $("#password").blur(checkPassword);
+            $("#email").blur(checkEmail);
+            $("#name").blur(checkName);
+            $("#tel").blur(checkTel);
+            $("#checkCode").blur(checkCHECKCODE);
+            $("#birthday").blur(checkBirthday);
+            //为验证码添加点击事件
+            $("#img_checkCode").click(changeImg);
+        });
+    </script>
+</head>
+<body>
+<!--页眉部分-->
+<header id="header">
+
+</header>
+<!--注册表单-->
+<div class="bg_layout">
+    <div id="errorMsg" class="row"></div>
+    <div class="rg_left">
+        <p>新用户注册</p>
+        <p>USER REGISTER</p>
+    </div>
+    <div class="rg_center">
+        <div class="rg_form">
+            <form id="registerForm" action="user">
+                <table>
+                    <tr>
+                        <td class="td_left"><label for="userName">用户名</label></td>
+                        <td class="td_right"><input type="text" name="userName" id="userName" placeholder="请输入用户名"></td>
+                    </tr>
+                    <tr>
+                        <td class="td_left"><label for="password">密码</label></td>
+                        <td class="td_right"><input type="password" name="password" id="password" placeholder="请输入密码"></td>
+                    </tr>
+                    <tr>
+                        <td class="td_left"><label for="email">Email</label></td>
+                        <td class="td_right"><input type="email" name="email" id="email" placeholder="请输入邮箱"></td>
+                    </tr>
+                    <tr>
+                        <td class="td_left"><label for="name">姓名</label></td>
+                        <td class="td_right"><input type="text" name="name" id="name" placeholder="请输入姓名"></td>
+                    </tr>
+                    <tr>
+                        <td class="td_left"><label for="tel">手机号</label></td>
+                        <td class="td_right"><input type="text" name="telephone" id="tel" placeholder="请输入手机号"></td>
+                    </tr>
+                    <tr>
+                        <td class="td_left"><label>性别</label></td>
+                        <td class="td_right">
+                            <input type="radio" name="sex" checked="checked" value="男">男
+                            <input type="radio" name="sex" value="女">女
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_left"><label for="birthday">出生日期</label></td>
+                        <td class="td_right"><input type="date" name="birthday" id="birthday"></td>
+                    </tr>
+                    <tr>
+                        <td class="td_left" ><label for="checkCode">验证码</label></td>
+                        <td class="td_right">
+                            <input type="text" name="checkCode" id="checkCode" placeholder="请输入验证码">
+                            <img id="img_checkCode" src="user/checkCode"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" ><input id="btn_sub" type="submit" value="注册"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="rg_right">
+        <P>已有账号？<a href="login.html">立即登录</a></P>
+    </div>
+</div>
+<!--页脚部分-->
+<footer id="footer">
+
+</footer>
+</body>
+</html>

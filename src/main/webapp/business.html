@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>发布房源</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/currenct.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script src="js/include.js" type="text/javascript"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/check.js"></script>
+    <style>
+        body{
+            background-color: #ecf0f1;
+            min-height: 500px;
+        }
+        input[type=file]{
+            display: inline-block;
+            border: 1px solid #c0c0c9;
+            border-radius: 4px;
+            padding: 7px;
+            height: 40px;
+            width: 200px;
+        }
+        .span-line{
+            margin-right: 50px;
+            width: 200px;
+        }
+        .uploadImg{
+            color: white;
+            width: 80px;
+            height: 80px;
+            text-align: center;
+            line-height: 80px;
+        }
+    </style>
+
+
+</head>
+<body>
+<!--页眉部分-->
+<header id="header">
+
+</header>
+<!-- 主体-->
+<div  id="main" class="container">
+    <div class="page-header">
+        <h1>发布房源 <small>发布自己的房源信息</small></h1>
+    </div>
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading"><span class="glyphicon glyphicon-home"></span> 基础信息</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{region.region}} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li v-for="region in regionList" v-on:click="selectRegion(region)"><a href="#">{{region.region}}</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >详细地址</span>
+                            <input type="text" class="form-control" v-model="housres.detailregion" placeholder="请填写详细地址" onblur="checkWord(this)">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading"><span class="glyphicon glyphicon-info-sign"></span> 房源介绍</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >标题</span>
+                            <input type="text" class="form-control" v-model="housres.hname" placeholder="请填写标题" onblur="checkWord(this)">
+                        </div>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >简介</span>
+                            <textarea type="text" class="form-control" v-model="housres.hdetail" placeholder="请填写房源简介" onblur="checkWord(this)"></textarea>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading"><span class="glyphicon glyphicon-time"></span> 预定信息</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >价格</span>
+                            <input type="text" class="form-control" v-model="housres.hprice" placeholder="请填写价格" onblur="checkNumber(this)">
+                        </div>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >床型</span>
+                            <input type="text" class="form-control" v-model="housres.bedtype" placeholder="请填写床型" onblur="checkWord(this)">
+                        </div>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >床数</span>
+                            <input type="text" class="form-control" v-model="housres.bedcount" placeholder="请填写床数" onblur="checkNumber(this)">
+                        </div>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >面积</span>
+                            <input type="text" class="form-control" v-model="housres.harea" placeholder="请填写面积" onblur="checkNumber(this)">
+                        </div>
+                    </li>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <div class="input-group">
+                            <span class="input-group-addon" >可入住人数</span>
+                            <input type="text" class="form-control" v-model="housres.checkincount" placeholder="请填写可入住人数" onblur="checkNumber(this)">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading"><span class="glyphicon glyphicon-upload"></span> 上传图片</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li  class="list-group-item list-group-item-warning">
+                        <span class="span-line">
+                            <label v-if="bigpic == null || bigpic==''" class="uploadImg img-circle label-info">封面</label>
+                            <img v-if="bigpic != null && bigpic!=''" v-bind:src="bigpic" class="img-circle uploadImg" alt="封面">
+                        </span>
+                        <span class="span-line">
+                            <input type="file" v-on:change="selectFile($event,'bigpic')" class="input-file">
+                        </span>
+                        <span class="span-line">
+                            <label class="label label-success">图片大小建议600*420</label>
+                        </span>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <span class="span-line">
+                            <label v-if="smallpic1 == null || smallpic1 == ''" class="uploadImg img-circle label-info">客厅</label>
+                            <img v-if="smallpic1 != null && smallpic1!=''" v-bind:src="smallpic1" class="img-circle uploadImg">
+                        </span>
+                        <span class="span-line">
+                            <input type="file" v-on:change="selectFile($event,'smallpic1')" class="input-file">
+                        </span>
+                        <span class="span-line">
+                            <label class="label label-success">图片大小建议300*220</label>
+                        </span>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <span class="span-line">
+                            <label v-if="smallpic2 == null || smallpic2 == ''" class="uploadImg img-circle label-info">厨房</label>
+                            <img v-if="smallpic2 != null && smallpic2!=''" v-bind:src="smallpic2" class="img-circle uploadImg">
+                        </span>
+                        <span class="span-line">
+                            <input type="file" v-on:change="selectFile($event,'smallpic2')" class="input-file">
+                        </span>
+                        <span class="span-line">
+                            <label class="label label-success">图片大小建议300*220</label>
+                        </span>
+                    </li>
+                    <li  class="list-group-item list-group-item-warning">
+                        <span class="span-line">
+                            <label v-if="smallpic3 == null || smallpic3 == ''" class="uploadImg img-circle label-info">卧室</label>
+                            <img v-if="smallpic3 != null && smallpic3!=''" v-bind:src="smallpic3" class="img-circle uploadImg">
+                        </span>
+                        <span class="span-line">
+                            <input type="file" v-on:change="selectFile($event,'smallpic3')" class="input-file">
+                        </span>
+                        <span class="span-line">
+                            <label class="label label-success">图片大小建议300*220</label>
+                        </span>
+                    </li>
+                    <li class="list-group-item list-group-item-warning">
+                        <span class="span-line">
+                            <label v-if="smallpic4 == null || smallpic4 == ''" class="uploadImg img-circle label-info">卫浴</label>
+                            <img v-if="smallpic4 != null && smallpic4!=''" v-bind:src="smallpic4" class="img-circle uploadImg">
+                        </span>
+                        <span class="span-line">
+                            <input type="file" v-on:change="selectFile($event,'smallpic4')" class="input-file">
+                        </span>
+                        <span class="span-line">
+                            <label class="label label-success">图片大小建议300*220</label>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                <input type="button" class="btn btn-block btn-success" value="发布房源" v-on:click="submitHousres()">
+            </div>
+        </div>
+    </div>
+    <div style="height: 50px"></div>
+</div>
+<!--页脚部分-->
+<footer id="footer">
+
+</footer>
+</body>
+<script>
+    new Vue({
+        el:"#main",
+        data:{
+            housres:{
+                hname:"无标题",
+                hdetail:"详情空",
+                bedtype:"大床",
+                bedcount:"2",
+                checkincount:"2",
+                harea:"100",
+                hprice:"298",
+                detailregion:""
+            },
+            region:{
+                rid:1,
+                region:"选择省份"
+            },
+            regionList:[],
+            files: [],
+            uploadSuccess: 0,
+            bigpic:"",
+            smallpic1:'',
+            smallpic2:'',
+            smallpic3:'',
+            smallpic4:''
+        },
+        methods: {
+            findAllRegion: function () {
+                var _this = this;
+                axios.post("housres/findAllRegion")
+                    .then(function (response) {
+                        _this.regionList = response.data;
+                    })
+            },
+            selectRegion: function (region) {
+                this.region.rid = region.rid;
+                this.region.region = region.region;
+
+                //alert(rid);
+            },
+            selectFile: function (e, img) {
+                //获取选定的文件
+                //alert(img);
+
+                let tFiles = e.target.files;
+                let len = tFiles.length;
+                for (var i = 0; i < len; i++) {
+                    //开始上传每一个文件
+                    var item = {
+                        name: img+"/"+tFiles[i].name,
+                        uploadPercentage: 1,
+                        size: this.formatFileSize(tFiles[i].size, 0),
+                        uploadStatus: 0
+                    }
+                    console.log(item);
+                    if (!this.checkFileType(tFiles[i].name.split('.')[1])) {
+                        item.uploadStatus = -2;
+                        return false;
+                    }
+                    this.files.push(item);
+
+                    //开始上传文件 新建一个formData
+                    var param = new FormData();
+                    //通过append向form对象添加数据
+                    param.append("file", tFiles[i]);
+                    //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+                    console.log(param.get("file"));
+
+                    //通过axios上传文件
+                    //配置
+                    let config = {
+                        //添加请求头
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+                    };
+                    var _this = this;
+                    axios.post("imageFile/upload", param, config).then(function (
+                        response) {
+                        console.log(response);
+                        item.uploadStatus = 2;
+                        alert(response.data.data);
+                        _this.switchImg(img, response.data.data);
+                    }).catch(function (error) {
+                        console.log(error);
+                        item.uploadStatus = -1;
+                    });
+
+                }
+            },
+            formatFileSize: function (fileSize, idx) {
+                var units = ["B", "KB", "MB", "GB"];
+                idx = idx || 0;
+                if (fileSize < 1024 || idx === units.length - 1) {
+                    return fileSize.toFixed(1) +
+                        units[idx];
+                }
+                return this.formatFileSize(fileSize / 1024, ++idx);
+            },
+            checkFileType: function (fileType) {
+                const acceptTypes = ['png', 'jpg'];
+                for (var i = 0; i < acceptTypes.length; i++) {
+                    if (fileType === acceptTypes[i]) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            switchImg: function (imgType, imgUrl) {
+                switch (imgType) {
+                    case 'bigpic':
+                        this.bigpic = imgUrl;
+                        break;
+                    case 'smallpic1':
+                        this.smallpic1 = imgUrl;
+                        break;
+                    case 'smallpic2':
+                        this.smallpic2 = imgUrl;
+                        break;
+                    case 'smallpic3':
+                        this.smallpic3 = imgUrl;
+                        break;
+                    case 'smallpic4':
+                        this.smallpic4 = imgUrl;
+                        break;
+                }
+            },
+            submitHousres:function () {
+                var param = new URLSearchParams();
+                param.append("rid",this.region.rid);
+                param.append("hname",this.housres.hname);
+                param.append("hdetail",this.housres.hdetail);
+                param.append("bedtype",this.housres.bedtype);
+                param.append("bedcount",this.housres.bedcount);
+                param.append("checkincount",this.housres.checkincount);
+                param.append("harea",this.housres.harea);
+                param.append("hprice",this.housres.hprice);
+                param.append("detailregion",this.housres.detailregion);
+                param.append("bigpic",this.bigpic);
+                param.append("smallpic1",this.smallpic1);
+                param.append("smallpic2",this.smallpic2);
+                param.append("smallpic3",this.smallpic3);
+                param.append("smallpic4",this.smallpic4);
+                axios.post("housres/releaseHousres",param)
+                    .then(function (response) {
+                        if(response.data.flag){
+                            alert("发布成功！");
+                        }else{
+                            alert("失败！");
+                        }
+                    });
+            },
+            init:function () {
+                axios.post("user/findOne")
+                    .then(function (response) {
+                        if (response.data==null){
+                            location.href="login.html";
+                            return;
+                        }
+                    });
+            }
+        },
+        created:function () {
+            this.init();
+            this.findAllRegion();
+        }
+    });
+</script>
+</html>

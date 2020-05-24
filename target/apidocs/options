@@ -1,0 +1,25 @@
+-classpath
+'E:/Java/ali_maven_local/org/mybatis/mybatis/3.5.3/mybatis-3.5.3.jar;E:/Java/ali_maven_local/javax/javaee-web-api/7.0/javaee-web-api-7.0.jar;E:/Java/ali_maven_local/net/sf/ezmorph/ezmorph/1.0.6/ezmorph-1.0.6.jar;E:/Java/ali_maven_local/commons-io/commons-io/2.4/commons-io-2.4.jar;E:/Java/ali_maven_local/javax/servlet/jsp/jsp-api/2.0/jsp-api-2.0.jar;E:/Java/ali_maven_local/commons-fileupload/commons-fileupload/1.3.1/commons-fileupload-1.3.1.jar;E:/Java/ali_maven_local/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar;E:/Java/ali_maven_local/org/apache/tomcat/tomcat-servlet-api/7.0.47/tomcat-servlet-api-7.0.47.jar;E:/Java/ali_maven_local/org/apache/tomcat/tomcat-api/7.0.47/tomcat-api-7.0.47.jar;E:/Java/ali_maven_local/net/sf/json-lib/json-lib/2.2.3/json-lib-2.2.3-jdk15.jar;E:/Java/ali_maven_local/org/json/json/20160810/json-20160810.jar;E:/Java/ali_maven_local/com/fasterxml/jackson/core/jackson-annotations/2.2.3/jackson-annotations-2.2.3.jar;E:/Java/ali_maven_local/org/apache/commons/com.springsource.org.apache.commons.logging/1.1.1/com.springsource.org.apache.commons.logging-1.1.1.jar;E:/Java/ali_maven_local/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar;E:/Java/ali_maven_local/commons-collections/commons-collections/3.2/commons-collections-3.2.jar;E:/Java/ali_maven_local/javax/activation/activation/1.1/activation-1.1.jar;E:/Java/ali_maven_local/javax/mail/javax.mail-api/1.5.6/javax.mail-api-1.5.6.jar;E:/Java/ali_maven_local/com/fasterxml/jackson/core/jackson-core/2.2.3/jackson-core-2.2.3.jar;E:/Java/ali_maven_local/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar;E:/Java/ali_maven_local/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar;E:/Java/ali_maven_local/com/fasterxml/jackson/core/jackson-databind/2.2.3/jackson-databind-2.2.3.jar;E:/Java/ali_maven_local/com/sun/mail/javax.mail/1.5.3/javax.mail-1.5.3.jar;E:/Java/ali_maven_local/org/apache/commons/com.springsource.org.apache.commons.beanutils/1.7.0/com.springsource.org.apache.commons.beanutils-1.7.0.jar;E:/Java/ali_maven_local/log4j/log4j/1.2.16/log4j-1.2.16.jar;E:/Java/ali_maven_local/org/apache/tomcat/tomcat-util/7.0.47/tomcat-util-7.0.47.jar;E:/Java/ali_maven_local/org/apache/tomcat/tomcat-juli/7.0.47/tomcat-juli-7.0.47.jar;E:/Java/ali_maven_local/org/apache/tomcat/tomcat-coyote/7.0.47/tomcat-coyote-7.0.47.jar;E:/Java/ali_maven_local/junit/junit/4.10/junit-4.10.jar;E:/Java/ali_maven_local/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar;E:/Java/ali_maven_local/commons-lang/commons-lang/2.3/commons-lang-2.3.jar;E:/Java/ali_maven_local/org/apache/commons/com.springsource.org.apache.commons.collections/3.2.0/com.springsource.org.apache.commons.collections-3.2.0.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'E:/project/毕设/homestayProject/homestay/src/main/java'
+-Xdoclint:none
+-author
+-bottom
+'Copyright &#169; 2020. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'E:/project/毕设/homestayProject/homestay/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'homestay 1.0-SNAPSHOT API'
+-linkoffline
+'http://docs.oracle.com/javase/7/docs/api' 'E:/project/毕设/homestayProject/homestay/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'homestay 1.0-SNAPSHOT API'

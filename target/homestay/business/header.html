@@ -1,0 +1,66 @@
+
+<script>
+    $(function(){
+        $.post("user/findOne",{},function(user){
+            if(user===""||user===null){
+                $("#user-msg").html("<a href='login.html'>请登录！</a>");
+            }else{
+                var exit="<a href='user/exit'>退出登录</a>";
+                $("#user-msg").html("<a>欢迎登录！"+user.userName+"</a>"+exit);
+            }
+    });
+    var time = $("#time");
+    currentTime(1000,time);
+    searchRoom();
+});
+function currentTime(f,timeNode){
+    var time1 = new Date().toLocaleString();
+    $(timeNode).html("现在是："+time1);
+    setInterval(function(){
+        var time = new Date().toLocaleString();
+        $(timeNode).html("现在是："+time);
+    },f);
+    
+}
+//搜索房间
+function searchRoom(){
+    $("#search-btn").click(function(){
+        var rname = $("#search-input").val();
+        location.href="index.html?rname="+rname;
+        rname ="";
+    });
+}
+</script>
+<!--页眉部分-->
+    <div class="container-fluid">
+        <div id="title" class="row">
+            <div id="logo_name">
+                <label>名宿客栈</label>
+            </div>
+            <div id="link">
+                <a href="index.html">首页</a>
+                <a href="myorder.html"><span class="glyphicon glyphicon-briefcase"></span>  您的订单</a>
+                <a href="register.html">注册账户</a>
+                <a href="login.html">登录</a>
+                <a href="../business.html">成为房东</a>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid paddtop">
+        <div class="row tool">
+            <div id="userspan">
+                <label id="user-msg"></label>
+            </div>
+            <div id="timespan">
+                <label id="time"></label>
+            </div>
+        </div>
+        <div class="row tool">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <input id="search-input" class="search-input" type="text" name="search" placeholder="请输入搜索内容">
+                <a id="search-btn" class="search-btn" href="javascript:void(0);">搜索</a>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>

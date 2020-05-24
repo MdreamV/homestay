@@ -1,0 +1,93 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header{
+    background-color: white;
+}
+#title{
+    height: 65px;
+    color: white;
+    box-shadow: 1px 1px 8px #888888 inset;
+    background-color: #d32f2f;
+}
+#logo_name{
+    float: left;
+    margin-left: 150px;
+    line-height: 60px;
+    font-size: 25px;
+}
+#link{
+    float: left;
+    margin-left: 45%;
+    /*margin-right: 30px;*/
+    line-height: 65px;
+    font-size: 15px;
+}
+#link > a{
+    float: left;
+    padding: 0px 15px;
+    height: 65px;
+    color: white;
+    text-decoration:none;
+}
+#link a:hover{
+    color: #d32f2f;
+    background-color: white;
+}
+.search-input{
+    float: left;
+    width: 90%;
+    height:35px;
+    padding-left: 15px;
+    border:2px solid #ffdd00;
+}
+.search-btn{
+    float: left;
+    width: 10%;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    background-color: #ffdd00;
+}
+.tool{
+    height: 35px;
+    line-height: 35px;
+    color: black;
+    background-color: #ecf0f1;
+    margin-bottom: 1px;
+}
+.footer{
+    background-color: #d32f2f;
+    font-size: 12px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+#userspan{
+    float: left;
+    width: 280px;
+    color: #888888;
+    margin-left: 150px;
+}
+#userspan  a{
+    color: #888888;
+    margin-right: 5px;
+    text-decoration:none;
+}
+#userspan  a:hover{
+    color: #ffdd00;
+}
+#timespan{
+    float: left;
+    color: #888888;
+    margin-left: 50%;
+}
+label{
+    margin-bottom: 0;
+}
+.img{
+    width: 100%;
+    height: 80px;
+}

@@ -1,0 +1,22 @@
+.margin-per-10{
+    margin-left: 10%;
+}
+.nav-title{
+     margin: 5px 50px;
+ }
+.route-detail{
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    padding: 20px;
+    border: 1px solid #a6a6a6;
+}
+.img-detail{
+    width: 500px;
+    height: 300px;
+}
+.img-detail-num{
+    width: 100px;
+    height: 50px;
+}
+

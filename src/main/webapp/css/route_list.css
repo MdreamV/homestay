@@ -1,0 +1,101 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.block-title{
+    margin: 10px 30% 10px 5%;
+    padding: 10px;
+    background-color: rgba(132, 125, 166, 0.19);
+}
+.block-main{
+    margin: 10px 30% 10px 5%;
+    /*border: #ffdd00 1px solid;*/
+    /*padding: 15px 15px;*/
+}
+.shop-block{
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 15px;
+    border: 1px solid rgba(146, 166, 154, 0.38);
+}
+.img-block{
+    float: left;
+    width:35%;
+    height:180px;
+}
+.content-block{
+    width: 40%;
+    padding: 20px;
+    float: left;
+}
+.price-block{
+    text-align: center;
+    width: 24%;
+    height: 180px;
+    padding: 30px;
+    float: left;
+    line-height: 60px;
+}
+.text-title{
+    font-size: 20px;
+    font-family: "Microsoft YaHei UI";
+    font-weight: 500;
+}
+.v-line{
+    float: left;
+    width: 1px;
+    height: 100px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    background: rgba(15, 15, 15, 0.16);
+}
+.text-price{
+    color: red;
+    font-size: 35px;
+}
+.text-produce{
+    color: #a6a6a6;
+    font-size: 15px;
+    font-weight: 100;
+}
+.text-red-size-20{
+    color: red;
+    font-size: 20px;
+}
+.text-size-20{
+    font-size: 20px;
+}
+.page-count{
+    margin: 10px 30% 10px 5%;
+}
+.v-line-25{
+    float: left;
+    width: 5px;
+    height: 25px;
+    margin-right: 5px;
+    background-color: #a6a6a6;
+}
+.page-num{
+    margin: 15px 30% 100px 5%;
+}
+.page-num > div{
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #a6a6a6;
+    width: 50px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.page-num  a{
+    text-decoration: none;
+    color: #0f0f0f;
+}
+.page-control{
+    width: 60px;
+}
+.page-active{
+    background-color: #ffdd00;
+}

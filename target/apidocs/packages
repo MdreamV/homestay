@@ -1,0 +1,6 @@
+com.jtw.homestay.dao
+com.jtw.homestay.domain
+com.jtw.homestay.service
+com.jtw.homestay.service.Impl
+com.jtw.homestay.utils
+com.jtw.homestay.web.servlet

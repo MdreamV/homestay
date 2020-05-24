@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>房间详情</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/currenct.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script type="text/javascript" src="js/include.js"></script>
+    <script type="text/javascript" src="js/axios.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script src="js/getParameter.js"></script>
+
+    <style>
+        .room-img{
+            padding-top: 16px;
+            height: 450px;
+        }
+        .room-smallimg{
+            padding-bottom: 15px;
+            width: 350px;
+            height: 210px;
+        }
+        .room-img img:hover{
+            padding-bottom: 15px;
+            transition: transform 0.5s;
+            transform: scale(1.05);
+        }
+        .room-bigpic{
+            width: 730px;
+            height: 410px;
+        }
+        .overflow-hidden{
+            overflow: hidden;
+        }
+        .city{
+            text-align: center;
+            height: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #c0c0c9;
+        }
+        .city:hover {
+            text-align: center;
+            font-size: 17px;
+            font-weight: 700;
+            color: black;
+        }
+        .scale{
+            text-align: center;
+            font-size: 10px;
+            font-weight: 300;
+            margin-top: 5px;
+            color: gray;
+        }
+        .hdetail{
+            height: 45px;
+            line-height: 45px;
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+        .content{
+            /*float: left;*/
+            margin-right: 50px;
+            height: 50px;
+            width: 50px;
+            line-height: 50px;
+            text-align: center;
+        }
+        .head-img{
+            width: 50px;
+            height: 50px;
+        }
+        .user-content{
+            margin-left: 20px;
+            font-size: 15px;
+        }
+        .score{
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            font-family: Consolas;
+            font-size: 18px;
+            /*background-color: black;*/
+            color: white;
+        }
+        .color-yellow{
+            color: #ffdd00;
+        }
+        .price{
+            margin-top: 20px;
+            color: red;
+            font-weight: 800;
+            font-size: 25px;
+        }
+        .btn-sub{
+            margin-left: 65%;
+        }
+    </style>
+
+</head>
+<body>
+<header id="header"></header>
+<div id="houseDetail" class="container-fluid">
+    <!--图片-->
+    <div class="row room-img">
+        <div class="col-md-6 overflow-hidden"><img class="room-bigpic img-responsive" v-bind:src="roomImg.bigpic"></div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 overflow-hidden">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic1!=null" v-bind:src="roomImg.smallpic1">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic1==null" v-bind:src="roomImg.bigpic">
+                </div>
+                <div class="col-md-6 overflow-hidden">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic2!=null" v-bind:src="roomImg.smallpic2">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic2==null" v-bind:src="roomImg.bigpic">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 overflow-hidden">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic3!=null" v-bind:src="roomImg.smallpic3">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic3==null" v-bind:src="roomImg.bigpic">
+                </div>
+                <div class="col-md-6 overflow-hidden">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic4!=null" v-bind:src="roomImg.smallpic4">
+                    <img class="room-smallimg img-responsive" v-if="roomImg.smallpic4==null" v-bind:src="roomImg.bigpic">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1"><div class="city">概览</div><div class="scale">DETAIL</div></div>
+            <div class="col-md-1"><div class="city">房东</div><div class="scale">HOST</div></div>
+            <div class="col-md-1"><div class="city">设施</div><div class="scale">FACILITIES</div></div>
+            <div class="col-md-1"><div class="city">评价</div><div class="scale">COMMENT</div></div>
+        </div>
+        <div class="row"><hr></div>
+        <div class="row">
+            <div class="hdetail">{{housres.hdetail}}</div>
+        </div>
+        <div class="row">
+            <span v-if="facilities.wifi" class="label label-primary">wifi</span>
+            <span v-if="facilities.network" class="label label-info">有线网络</span>
+            <span v-if="facilities.airconditioner" class="label label-success">空调</span>
+            <span v-if="facilities.heating" class="label label-warning">暖气</span>
+            <span v-if="facilities.hotshower" class="label label-primary">热水淋浴</span>
+            <span v-if="facilities.shampoo" class="label label-info">洗发水</span>
+            <span v-if="facilities.showergel" class="label label-success">沐浴露</span>
+            <span v-if="facilities.tableware" class="label label-info">餐具</span>
+            <span v-if="facilities.gasstove" class="label label-warning">燃气灶</span>
+            <span v-if="facilities.freeparking" class="label label-success">免费停车</span>
+        </div>
+        <div class="margin-10"></div>
+        <!--概览-->
+        <div class="row">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <span class="content"> <span class="glyphicon glyphicon-home"></span> 整套</span>
+                    <span class="content"> <span class="glyphicon glyphicon-equalizer"></span> 面积<span>{{housres.harea}}</span>m²</span>
+                    <span class="content"> <span class="glyphicon glyphicon-bed"></span> 可住<span>{{housres.checkincount}}</span>人</span>
+                </div>
+            </div>
+        </div>
+        <!--房东-->
+        <div class="row">
+            <div class="hdetail">房东</div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <span class=""><img class="head-img img-rounded" src="img/room1.jpg"></span>
+                    <span class="user-content">{{host.userName}}</span>
+                    <span class="user-content"> <span class="glyphicon glyphicon-comment"></span> 评价数 <span class="badge">{{commentList.length}}</span></span>
+                    <span class="user-content"> <span class="glyphicon glyphicon-home"></span> 房源数 <span class="badge">2</span></span>
+                </div>
+                <div class="panel-body">
+                    <div>{{housres.hdetail}}</div>
+                </div>
+            </div>
+        </div>
+        <!--预定-->
+        <div class="row">
+            <div class="hdetail">预定</div>
+            <div class="panel panel-info">
+                <div class="panel-body  bg-warning">
+                    <div v-show="error.isActive" class="alert alert-danger">{{error.msg}}</div>
+                    <div>
+                        <span class="glyphicon glyphicon-time"></span> 入住日期：<input type="date" class="date" v-on:blur="checkInDate" v-model="order.checkindate">
+                        <span class="glyphicon glyphicon-time"></span> 退房日期：<input type="date" class="date" v-on:blur="checkOutDate" v-model="order.checkoutdate">
+                    </div>
+                    <div v-if="total!='' && total!=null && total > 0" class="price">
+                        <span class="glyphicon glyphicon-shopping-cart"></span><span>￥ {{housres.hprice*total}} 元</span>
+                    </div>
+                    <div class="btn-sub">
+                        <input type="button" class="btn btn-success" v-on:click="submitOrder()" value="立即预定">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--评价-->
+        <div class="row">
+            <div class="hdetail">评价</div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <span>
+                        <label class="score img-circle label-info">{{housres.hscore}}</label>
+                        <label v-for="index in Math.floor(housres.hscore)"><span class="color-yellow glyphicon glyphicon-star"></span></label>
+                        <label>共{{commentList.length}}条</label>
+                        <!--<label v-for="index in Math.floor(housres.hscore)"><span class="color-yellow glyphicon glyphicon-star"></span></label>-->
+                    </span>
+                    <span class="user-content">
+                        <span class="glyphicon glyphicon-duplicate"></span>
+                        描述 <span class="badge">{{housres.des}}</span>
+                    </span>
+                    <span class="user-content">
+                        <span class="glyphicon glyphicon-grain"></span>
+                        卫生 <span class="badge">{{housres.hygiene}}</span>
+                    </span>
+                    <span class="user-content">
+                        <span class="glyphicon glyphicon-screenshot"></span>
+                        位置 <span class="badge">{{housres.location}}</span>
+                    </span>
+                </div>
+                <ul class="list-group">
+                    <li v-for="comment in commentList" class="list-group-item">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <span><img class="score img-circle" src="img/room1.jpg"></span>
+                                <span class="user-content">{{comment.user.userName}}</span>
+                                <span class="user-content">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    评分 <span class="badge">{{comment.score}}</span>
+                                </span>
+                                <label v-for="index in Math.floor(comment.score)"><span class="color-yellow glyphicon glyphicon-star"></span></label>
+                            </div>
+                            <div class="panel-body">
+                                {{comment.content}}
+                            </div>
+                            <div class="panel-footer">
+                                <span class="user-content">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    评价时间： <span class="badge">{{comment.contentdate}}</span>
+                                </span>
+                            </div>
+                            <div v-if="comment.reply!='' && comment.reply!=null" class="panel-footer">
+                                <span class="user-content">
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                    店家回复： <span class="label label-success">{{comment.reply}}</span>
+                                </span>
+                                <span class="user-content">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    回复时间： <span class="badge">{{comment.replydate}}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<footer id="footer"></footer>
+</body>
+<script>
+    new Vue({
+        el:"#houseDetail",
+        data:{
+            user:{},
+            housres:{},
+            host:{},
+            facilities:{},
+            roomImg:{},
+            commentList:[],
+            region:{},
+            order:{
+                checkindate:"",
+                checkoutdate:"",
+                realpay:0,
+                hid:"",
+                uid:""
+            },
+            total:0,
+            error:{
+                isActive:false,
+                msg:""
+            }
+        },
+        methods:{
+            init:function(){
+                var curDate = new Date();
+                var nextDate = new Date(curDate.getTime() + 24*60*60*1000); //后一天
+                this.order.checkindate = this.formatDate(curDate);
+                this.order.checkoutdate = this.formatDate(nextDate);
+                this.total = (nextDate- curDate)/(1000*60*60*24);
+                var _this = this;
+                axios.post("user/findOne")
+                    .then(function (response) {
+                        // if(response.data==null){
+                        //     //location.href="login.html";
+                        //     //return;
+                        // }
+                        _this.user = response.data;
+                        //alert(_this.user);
+                    });
+                //alert(this.order.checkindate+this.order.checkoutdate);
+            },
+            formatDate:function(date){
+                //var date = new Date(date);
+                var year = date.getFullYear();
+                var mouth = date.getMonth()+1;
+                var day = date.getDate();
+                if(mouth<10){
+                    mouth = "0" + mouth;
+                }
+                if(day<10){
+                    day = "0" + day;
+                }
+                return year + "-" + mouth + "-" +day;
+            },
+            checkInDate:function(){
+                var currentDate = new Date();
+                var checkoutDate = new Date(this.order.checkoutdate);
+                var checkinDate = new Date(this.order.checkindate);
+                //alert(currentDate.toLocaleDateString()+"-----------"+checkinDate.toLocaleDateString());
+                if(checkinDate <= currentDate && checkinDate < checkoutDate){
+                    this.error.isActive = true;
+                    this.error.msg = "请选择正确的入住日期！";
+                    var _this = this;
+                    setTimeout(function () {
+                        _this.error.isActive = false;
+                    },2000);
+                }
+            },
+            checkOutDate:function(){
+                var checkinDate = new Date(this.order.checkindate);
+                var checkoutDate = new Date(this.order.checkoutdate);
+                if(checkinDate >= checkoutDate){
+                    this.error.isActive = true;
+                    this.error.msg = "请选择正确的退房日期！";
+                    var _this = this;
+                    setTimeout(function () {
+                        _this.error.isActive = false;
+                    },2000);
+                }
+                this.total = (checkoutDate- checkinDate)/(1000*60*60*24);
+
+            },
+            findByHid:function (hid) {
+                var _this=this;
+                var param = new URLSearchParams();
+                param.append("hid",hid);
+                axios.post("housres/findHousresByHid",param)
+                    .then(function (response) {
+                        _this.housres = response.data;
+                        _this.host = response.data.user;
+                        _this.facilities = response.data.facilities;
+                        _this.region = response.data.region;
+                        _this.roomImg = response.data.roomImg;
+                        _this.commentList = response.data.comment;
+                        //alert(JSON.stringify(_this.roomImg.bigpic));
+                });
+            },
+            submitOrder:function () {
+                if(this.user==null){
+                    location.href="login.html";
+                    return;
+                }
+                this.order.realpay = this.total*this.housres.hprice;
+                this.order.hid = this.housres.hid;
+                this.order.uid = this.user.uid;
+                var _this = this;
+                var param = new URLSearchParams();
+                //param.append("order",this.order);
+                param.append("checkindate",this.order.checkindate);
+                param.append("checkoutdate",this.order.checkoutdate);
+                param.append("realpay",this.order.realpay);
+                param.append("uid",this.order.uid);
+                param.append("hid",this.order.hid);
+                // param.append("checkindate",this.order.checkindate);
+                axios.post("order/preOrder",param)
+                    .then(function (response) {
+                        if(response.data.flag){
+                            var oid = response.data.data.oid;
+                            location.href="pay.html?oid="+oid;
+                        }else{
+                            alert("系统繁忙！");
+                        }
+                    });
+            },
+            checkLogin:function () {
+
+            }
+        },
+        created:function () {
+            this.init();
+            var hid  = getParameter("hid");
+            this.findByHid(hid);
+        }
+    });
+</script>
+</html>

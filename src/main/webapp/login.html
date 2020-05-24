@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>登录</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/currenct.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script type="text/javascript" src="js/include.js"></script>
+    <style>
+        body{
+            background-color: #ecf0f1;
+        }
+    </style>
+    <script>
+        //校验用户名
+        function checkUserName(){
+            //1.获取用户名
+            var userName=$("#userName1").val();
+            //2.定义正则表达式
+            var reg_username=/^\w{8,20}$/;
+            //3.判断匹配信息
+            var flag=reg_username.test(userName);
+            //4.给出提示信息
+            if(flag){
+                $("#userName1").css("border","1px solid green");
+            }else{
+                $("#userName1").val("用户名长度为8-20,英文字符");
+                $("#userName1").css("border","1px solid red");
+            }
+            // alert("校验用户名");
+            return flag;
+        }
+        //校验密码
+        function checkPassword(){
+            //1.获取密码
+            var password=$("#password1").val();
+            //2.定义正则表达式
+            var reg_password=/^\w{8,20}$/;
+            //3.判断匹配信息
+            var flag=reg_password.test(password);
+            //4.给出提示信息
+            if(flag){
+                $("#password1").css("border","1px solid green");
+            }else{
+                $("#password1").attr("value","密码长度为8-20");
+                $("#password1").css("border","1px solid red");
+            }
+
+            // alert("校验密码");
+            return flag;
+        }
+        //校验验证码
+        function checkCHECKCODE(){
+            //1.获取验证码
+            var checkCode = $("#checkCode1").val();
+            //2.判断验证码是否为空
+            if(checkCode==""){
+                $("#checkCode1").css({"border":"1px solid red","color":"red"}).attr("placeholder","请输入正确的验证码！");
+                return false;
+            }else{
+                $("#checkCode1").css({"border":"1px solid green","color":"green"});
+                return true;
+            }
+        }
+        $(function () {
+            //1.为提交按钮绑定单击事件
+            $("#btn-login").click(function () {
+                if(checkUserName()&&checkPassword()&&checkCHECKCODE()){
+                    //2.ajax异步提交请求,
+                    $.post("user/login",$("#login_form").serialize(),function (data) {
+                        //data:{flag:true,errorMsg:""}
+                        if(data.flag){
+                            //登录成功
+                            location.href="index.html";
+                        }else{
+                            $("#msg").html(data.errorMsg).css("visibility","visible");
+                            changeCheckCode();
+                        }
+                    });
+                }
+            });
+            $("#img-checkCode1").click(changeCheckCode);
+            $("#userName1").blur(checkUserName);
+            $("#password1").blur(checkPassword);
+            $("#checkCode1").blur(checkCHECKCODE);
+        });
+        function changeCheckCode(){
+            var date=new Date();
+            $("#img-checkCode1").attr("src","user/checkCode?"+date.getMilliseconds());
+        }
+    </script>
+</head>
+<body>
+<!--页眉部分-->
+<header id="header">
+
+</header>
+<!-- 主体-->
+<div class="login_layout container-fluid">
+    <div id="head" class="row">
+        <p>欢迎登录民宿客栈</p>
+    </div>
+    <!--提示信息-->
+    <div id="msg" class="row margin-10 message-box">
+
+    </div>
+    <!--登录表单-->
+    <div class="row">
+        <form id="login_form" method="post" class="container-fluid">
+            <div class="row margin-10">
+                <input id="userName1" class="padding-10 col-md-12 border-1" type="text" name="userName" placeholder="请输入账号">
+            </div>
+            <div class="row margin-10">
+                <input id="password1" class="padding-10 col-md-12 border-1" type="password" name="password" placeholder="请输入密码">
+            </div>
+            <div class="row margin-10">
+                    <input id="checkCode1" class="padding-10 col-md-6 border-1" type="text" name="checkCode" placeholder="请输入验证码">
+                <span class="col-md-6">
+                    <img id="img-checkCode1" class="fluid" src="user/checkCode">
+                </span>
+            </div>
+            <div class="row margin-10">
+                <input id="btn-login" type="button" class="col-md-6 login-submit padding-10 border-1" value="登录"/>
+                <span class="col-md-1 padding-10">
+                    <input type="checkbox" name="box-auto-login">
+                </span>
+                <span class="col-md-5">
+                    <label class="padding-10">自动登录</label>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="row"></div>
+</div>
+<!--页脚部分-->
+<footer id="footer">
+
+</footer>
+</body>
+</html>
