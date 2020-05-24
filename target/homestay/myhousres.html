@@ -247,12 +247,13 @@
             },
             deleteHourseByHid:function(housres){
                 console.log(housres);
+                var _this = this
                 var param =new URLSearchParams();
                 param.append("hid",housres.hid)
                 axios.post("housres/deleteHourseByHid",param)
                     .then(function (response) {
                         if (response.data.flag){
-                            let list = this.housresList;
+                            let list = _this.housresList;
                             for(let i in list){
                                 if(list[i].hid==housres.hid){
                                     list.splice(i,1);
